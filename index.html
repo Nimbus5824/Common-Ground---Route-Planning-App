@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f7f8f5">
+    <meta name="description" content="A collaborative route planner that turns stops, timing, and local insights into a story.">
+    <title>Common Ground — a route worth sharing</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Common Ground home"><span class="brand-mark" aria-hidden="true">cg</span> common ground</a>
+      <div class="topbar-actions">
+        <label class="role-picker">Viewing as
+          <select id="role-select" aria-label="Choose collaboration role">
+            <option value="admin">Admin</option>
+            <option value="collaborator">Collaborator</option>
+            <option value="guest">Guest</option>
+          </select>
+        </label>
+        <button class="button button-dark share-button" id="share-button" type="button">Share plan <span aria-hidden="true">↗</span></button>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="intro" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span> YOUR DAY, WELL SPENT</p>
+          <h1 id="page-title">A little more<br>along the way.</h1>
+          <p class="intro-copy">A route is more than getting there. Make room for the good bits in between.</p>
+        </div>
+        <div class="trip-date"><span aria-hidden="true">☼</span><span>Saturday, June 14<br><strong>One lovely day out</strong></span></div>
+      </section>
+
+      <section class="card route-card" aria-labelledby="route-title">
+        <div class="section-heading">
+          <div><p class="eyebrow">THE BIG PICTURE</p><h2 id="route-title">Your route</h2></div>
+          <button class="icon-button" id="zoom-button" type="button" aria-label="Zoom route map">＋</button>
+        </div>
+        <div class="map-wrap">
+          <div class="map-legend" aria-label="Map legend"><span><i class="legend-route"></i> planned route</span><span><i class="legend-pin"></i> your stops</span></div>
+          <svg id="route-map" class="route-map" viewBox="0 0 660 310" role="img" aria-labelledby="map-title map-desc">
+            <title id="map-title">Illustrated route from Portland to Hood River</title>
+            <desc id="map-desc">A winding route across a green landscape, with selectable pins for each stop.</desc>
+            <rect width="660" height="310" rx="18" fill="#e7eee4"/>
+            <path class="water" d="M0 41C98 68 112 17 220 49s145 3 213 32 149 26 227-3v70c-91 31-131-7-220-17s-140 21-224-6S81 176 0 140Z"/>
+            <path class="hill hill-one" d="M0 209c77-59 151-16 216-48s117-57 174-29 113 22 150-9 82-25 120-15v202H0Z"/>
+            <path class="hill hill-two" d="M0 252c80-31 129-40 200-10s106 6 166-20 103-27 153-3 90 31 141 11v80H0Z"/>
+            <path class="road" d="M64 246c42-18 46-69 99-70s47 49 102 34 54-81 117-81 56 50 108 33 51-79 106-72"/>
+            <path id="route-line" class="route-line" d="M64 246c42-18 46-69 99-70s47 49 102 34 54-81 117-81 56 50 108 33 51-79 106-72"/>
+            <g class="map-pin start-pin" transform="translate(64 246)" aria-hidden="true"><circle r="13"/><text y="4">S</text></g>
+            <g class="map-pin destination-pin" transform="translate(596 90)" aria-hidden="true"><circle r="13"/><text y="4">↗</text></g>
+            <g id="map-stops" aria-label="Route stops"></g>
+            <text class="map-label" x="25" y="281">PORTLAND</text>
+            <text class="map-label" x="531" y="66">HOOD RIVER</text>
+            <text class="map-water-label" x="337" y="49">COLUMBIA RIVER</text>
+          </svg>
+          <div class="map-caption"><span><strong>Portland</strong> to <strong>Hood River</strong></span><span class="caption-distance">64 mi · scenic route</span></div>
+        </div>
+        <div class="route-stats" aria-label="Route highlights">
+          <div class="stat"><span class="stat-icon sun-icon" aria-hidden="true">☀</span><span><strong>1 hr 28 min</strong><small>drive time · light traffic</small></span></div>
+          <div class="stat"><span class="stat-icon stop-icon" aria-hidden="true">⌖</span><span><strong id="stop-count">3 little detours</strong><small>stops worth slowing down for</small></span></div>
+          <div class="stat"><span class="stat-icon weather-icon" aria-hidden="true">☼</span><span><strong>72° & sunny</strong><small>good weather all the way</small></span></div>
+        </div>
+      </section>
+
+      <section class="card stops-card" aria-labelledby="stops-title">
+        <div class="section-heading stops-heading">
+          <div><p class="eyebrow">THE GOOD BITS</p><h2 id="stops-title">Stops along the way <span class="count-badge" id="stop-badge">3</span></h2></div>
+          <button class="text-button edit-only" id="add-focus" type="button">＋ Add a stop</button>
+        </div>
+        <div class="filters" role="group" aria-label="Filter stops by category">
+          <button class="filter-chip active" type="button" data-filter="all" aria-pressed="true">Everything</button>
+          <button class="filter-chip" type="button" data-filter="food" aria-pressed="false">Food & drink</button>
+          <button class="filter-chip" type="button" data-filter="nature" aria-pressed="false">Outdoors</button>
+          <button class="filter-chip" type="button" data-filter="culture" aria-pressed="false">Culture</button>
+        </div>
+        <ol class="stop-list" id="stop-list" aria-live="polite"></ol>
+        <form class="add-stop-form edit-only" id="add-stop-form">
+          <label class="sr-only" for="stop-name">Stop name</label>
+          <input id="stop-name" name="name" maxlength="60" placeholder="Somewhere you’d love to go…" required>
+          <label class="sr-only" for="stop-category">Stop category</label>
+          <select id="stop-category" name="category" aria-label="Stop category">
+            <option value="food">Food & drink</option>
+            <option value="nature">Outdoors</option>
+            <option value="culture">Culture</option>
+            <option value="services">Services</option>
+          </select>
+          <button class="button button-dark" type="submit">Add stop</button>
+        </form>
+        <p class="permission-note" id="permission-note" hidden></p>
+      </section>
+
+      <section class="story-grid" aria-label="Journey insights">
+        <article class="card story-card">
+          <p class="eyebrow">A MOMENT TO BREATHE</p>
+          <h2>Take the long way.</h2>
+          <p class="story-copy">The Historic Columbia River Highway adds just 18 minutes—and gives you the best view of the gorge.</p>
+          <div class="route-comparison"><span class="comparison-icon" aria-hidden="true">↗</span><span><strong>Worth the extra 18 min</strong><small>3 waterfalls · 1 very good view</small></span><span class="rainbow-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></span></div>
+        </article>
+        <article class="card story-card data-card">
+          <p class="eyebrow">YOUR PLAN, AT A GLANCE</p>
+          <h2>A day in colors.</h2>
+          <p class="story-copy">See how the stops in your current view are shaping up.</p>
+          <div class="insight-summary"><strong id="insight-count">3</strong><span id="insight-label">stops in this view</span></div>
+          <div class="category-chart" id="category-chart" role="img" aria-label="Stop categories in the current view">
+            <div class="category-row" data-category="food"><span>Food</span><i><b></b></i><strong>0</strong></div>
+            <div class="category-row" data-category="nature"><span>Outdoors</span><i><b></b></i><strong>0</strong></div>
+            <div class="category-row" data-category="culture"><span>Culture</span><i><b></b></i><strong>0</strong></div>
+            <div class="category-row" data-category="services"><span>Services</span><i><b></b></i><strong>0</strong></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="card together-card" aria-labelledby="together-title">
+        <div class="together-copy"><p class="eyebrow">BETTER TOGETHER</p><h2 id="together-title">Made for your people.</h2><p>Bring everyone into the plan. Share a link, trade ideas, make it yours.</p></div>
+        <div class="people-stack" aria-label="Three people collaborating"><span>J</span><span>M</span><span>A</span><b>+2</b></div>
+        <button class="button button-outline share-button" type="button">Invite your people <span aria-hidden="true">↗</span></button>
+      </section>
+      <p class="footer-note">A good plan leaves room for a little magic. <span aria-hidden="true">✳</span></p>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </main>
+  </body>
+</html>
