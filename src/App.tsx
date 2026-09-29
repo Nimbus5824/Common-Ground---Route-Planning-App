@@ -10,12 +10,12 @@ import {
 } from 'recharts'
 import './story.css'
 
-type Metric = 'Travel time' | 'Miles to location' | 'Hazards'
+type Metric = 'Travel time' | 'Miles to location' | 'Hazards' | 'Wait time' | 'Fuel cost'
 type DayType = 'weekday' | 'weekend'
 type RouteOption = 'fastest' | 'scenic'
 type TeamRole = 'admin' | 'collaborator' | 'guest'
 
-const metrics: Metric[] = ['Travel time', 'Miles to location', 'Hazards']
+const metrics: Metric[] = ['Travel time', 'Miles to location', 'Hazards', 'Wait time', 'Fuel cost']
 const chapters = [
   {
     id: 'first-wave',
@@ -75,20 +75,22 @@ const chapters = [
 ]
 
 const baseData = [
-  { stop: 'Start', 'Travel time': 0, 'Miles to location': 0, Hazards: 0 },
-  { stop: 'Stop 1', 'Travel time': 9, 'Miles to location': 0.8, Hazards: 1 },
-  { stop: 'Stop 2', 'Travel time': 24, 'Miles to location': 2.6, Hazards: 1 },
-  { stop: 'Stop 3', 'Travel time': 38, 'Miles to location': 4.1, Hazards: 4 },
-  { stop: 'Stop 4', 'Travel time': 54, 'Miles to location': 6.8, Hazards: 4 },
-  { stop: 'Stop 5', 'Travel time': 71, 'Miles to location': 8.1, Hazards: 7 },
-  { stop: 'Stop 6', 'Travel time': 95, 'Miles to location': 11.7, Hazards: 8 },
-  { stop: 'Stop 7', 'Travel time': 121, 'Miles to location': 15.3, Hazards: 12 },
+  { stop: 'Start', 'Travel time': 0, 'Miles to location': 0, Hazards: 0, 'Wait time': 0, 'Fuel cost': 0 },
+  { stop: 'Stop 1', 'Travel time': 9, 'Miles to location': 0.8, Hazards: 1, 'Wait time': 4, 'Fuel cost': 1.2 },
+  { stop: 'Stop 2', 'Travel time': 24, 'Miles to location': 2.6, Hazards: 1, 'Wait time': 9, 'Fuel cost': 2.4 },
+  { stop: 'Stop 3', 'Travel time': 38, 'Miles to location': 4.1, Hazards: 4, 'Wait time': 14, 'Fuel cost': 3.8 },
+  { stop: 'Stop 4', 'Travel time': 54, 'Miles to location': 6.8, Hazards: 4, 'Wait time': 22, 'Fuel cost': 5.7 },
+  { stop: 'Stop 5', 'Travel time': 71, 'Miles to location': 8.1, Hazards: 7, 'Wait time': 31, 'Fuel cost': 6.9 },
+  { stop: 'Stop 6', 'Travel time': 95, 'Miles to location': 11.7, Hazards: 8, 'Wait time': 43, 'Fuel cost': 9.6 },
+  { stop: 'Stop 7', 'Travel time': 121, 'Miles to location': 15.3, Hazards: 12, 'Wait time': 55, 'Fuel cost': 12.4 },
 ]
 
 const colors: Record<Metric, string> = {
   'Travel time': '#ed5838',
   'Miles to location': '#21786b',
   Hazards: '#bb9416',
+  'Wait time': '#8b4f85',
+  'Fuel cost': '#3478c5',
 }
 
 const routeStops = [
@@ -152,6 +154,8 @@ function App() {
           'Travel time': Math.round(point['Travel time'] * 0.86),
           'Miles to location': point['Miles to location'],
           Hazards: Math.max(0, Math.round(point.Hazards * 0.6)),
+          'Wait time': Math.round(point['Wait time'] * 0.82),
+          'Fuel cost': Number((point['Fuel cost'] * 0.92).toFixed(1)),
         }
       : {}),
   }))
@@ -263,7 +267,7 @@ function App() {
                       cursor={{ stroke: '#242a25', strokeDasharray: '3 4' }}
                       contentStyle={{ border: '1px solid #dcded8', borderRadius: 2, fontSize: 12 }}
                       labelStyle={{ color: '#242a25', fontWeight: 700, marginBottom: 4 }}
-                      formatter={(value, name) => [`${value} ${name === 'Travel time' ? 'min' : name === 'Miles to location' ? 'mi' : 'hazards'}`, name]}
+                      formatter={(value, name) => [`${name === 'Travel time' || name === 'Wait time' ? `${value} min` : name === 'Miles to location' ? `${value} mi` : name === 'Fuel cost' ? `$${value}` : `${value} hazards`}`, name]}
                     />
                     {metrics.filter((metric) => visibleMetrics.includes(metric)).map((metric) => (
                       <Area
