@@ -176,7 +176,7 @@ h1 em,
 
 .story-section { display: grid; grid-template-columns: minmax(270px, 0.8fr) minmax(0, 1.2fr); gap: 75px; margin-inline: -64px; padding: 115px 64px 110px; background: #e8ebf0; scroll-margin-top: 30px; }
 .story-heading { position: sticky; top: 48px; align-self: start; }
-.story-heading h2 { margin-top: 24px; font-size: 58px; line-height: 1; }
+.story-heading h2 { margin-top: 24px; color: #122018; font-size: 58px; line-height: 1; }
 .story-chapters { border-top: 1px solid var(--rule); }
 
 .story-chapter {
