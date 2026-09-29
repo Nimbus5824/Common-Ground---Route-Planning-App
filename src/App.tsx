@@ -213,6 +213,32 @@ function App() {
           </div>
         </section>
 
+        <section className="story-section" id="chapters" aria-labelledby="chapters-title">
+          <div className="story-heading">
+            <p className="eyebrow">ONE DAY ITINERARY</p>
+            <h2 id="chapters-title">The <em>Master Plan</em></h2>
+          </div>
+          <div className="story-chapters">
+            {chapters.map((chapter) => (
+              <article className="story-chapter" id={chapter.id} key={chapter.id}>
+                <div className="story-marker"><span>{chapter.number}</span><span className="marker-line" /></div>
+                <div className="story-body">
+                  <p className="chapter-time">START {chapter.time}</p>
+                  <h3>{chapter.title}</h3>
+                  <p>{chapter.copy}</p>
+                  <div className="itinerary-meta" aria-label={`${chapter.stop} itinerary details`}>
+                    <span><b>STOP</b>{chapter.stop}</span>
+                    <span><b>DURATION</b>{chapter.duration}</span>
+                    <span><b>TRAVEL</b>{chapter.travel}</span>
+                  </div>
+                  <div className="itinerary-actions"><button className="text-link chapter-link" type="button" onClick={() => { setSelectedStop(chapter.routeStopId); document.getElementById('route-planner')?.scrollIntoView({ behavior: 'smooth' }) }}>Edit location <span aria-hidden="true">↗</span></button></div>
+                </div>
+                <div className="story-stamp" aria-hidden="true">{chapter.number}<span>DAY<br />STOP</span></div>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <section className="explorer" id="explorer" aria-labelledby="chart-title">
           <div className="explorer-heading">
             <div>
@@ -354,15 +380,6 @@ function App() {
             </aside>
           </div>
 
-          <div className="collab-panel" id="collaboration" aria-labelledby="collab-title">
-            <div className="collab-copy"><p className="eyebrow">SHARED TRIP + EVENT MODE</p><h2 id="collab-title">Plan together, on the same map.</h2></div>
-            <div className="role-control"><span className="summary-label">VIEW AS</span><div className="role-switch" role="group" aria-label="Choose collaboration role">{(['admin', 'collaborator', 'guest'] as TeamRole[]).map((role) => <button key={role} type="button" aria-pressed={teamRole === role} onClick={() => setTeamRole(role)}>{role}</button>)}</div><p className="role-note">{teamRole === 'admin' ? 'Full control · edit route and invite people' : teamRole === 'collaborator' ? 'Can suggest stops and add notes' : 'View-only access to route and timing'}</p><div className="role-actions"><button type="button" className={`role-toggle role-primary ${routeEditing ? 'is-on' : ''}`} aria-pressed={routeEditing} onClick={() => setRouteEditing((current) => !current)}><span className="toggle-track"><span /></span>{teamRole === 'admin' ? 'Edit route' : teamRole === 'collaborator' ? 'Suggest a stop' : 'Request access'}</button><button type="button" className={`role-toggle role-secondary ${invitePeople ? 'is-on' : ''}`} aria-pressed={invitePeople} onClick={() => setInvitePeople((current) => !current)}><span className="toggle-track"><span /></span>{teamRole === 'admin' ? 'Invite people' : teamRole === 'collaborator' ? 'Add a note' : 'Copy shared link'}</button></div></div>
-            <div className="avatar-stack" aria-hidden="true"><span>MC</span><span>JL</span><span>RP</span></div>
-          </div>
-          <div className="profile-list" aria-label="People sharing this trip plan">
-            {sharedPeople.map((person) => <div className="profile-row" key={person.name}><span className="profile-avatar" style={{ '--profile-color': person.color } as React.CSSProperties}>{person.initials}</span><span className="profile-info"><strong>{person.name}</strong><small>{person.role}</small></span><span className="profile-status"><i />{person.status}</span></div>)}
-          </div>
-
           <section className="weather-panel" aria-labelledby="weather-title">
             <div className="weather-heading"><div><p className="eyebrow">LOCAL CONDITIONS · DUMMY DATA</p><h2 id="weather-title">Weather along the plan.</h2></div><span className="weather-location">SAN FRANCISCO, CA · TODAY</span></div>
             <div className="weather-grid">
@@ -372,32 +389,6 @@ function App() {
             <div className="weather-detail"><span className="summary-label">SELECTED WEATHER WINDOW · {selectedWeather.time}</span><strong>{selectedWeather.temperature} · {selectedWeather.rain} chance of rain · wind {selectedWeather.wind}</strong><span>{selectedForecast > 2 ? 'Plan a lighter pace after sunset and keep the hotel transfer covered.' : 'Clear conditions support the park stop and an easy walking transfer.'}</span></div>
             <p className="weather-note"><span aria-hidden="true">✳</span> Route note: the weather layer updates the plan window as you move through the day.</p>
           </section>
-        </section>
-
-        <section className="story-section" id="chapters" aria-labelledby="chapters-title">
-          <div className="story-heading">
-            <p className="eyebrow">ONE DAY ITINERARY</p>
-            <h2 id="chapters-title">The <em>Master Plan</em></h2>
-          </div>
-          <div className="story-chapters">
-            {chapters.map((chapter) => (
-              <article className="story-chapter" id={chapter.id} key={chapter.id}>
-                <div className="story-marker"><span>{chapter.number}</span><span className="marker-line" /></div>
-                <div className="story-body">
-                  <p className="chapter-time">START {chapter.time}</p>
-                  <h3>{chapter.title}</h3>
-                  <p>{chapter.copy}</p>
-                  <div className="itinerary-meta" aria-label={`${chapter.stop} itinerary details`}>
-                    <span><b>STOP</b>{chapter.stop}</span>
-                    <span><b>DURATION</b>{chapter.duration}</span>
-                    <span><b>TRAVEL</b>{chapter.travel}</span>
-                  </div>
-                  <div className="itinerary-actions"><button className="text-link chapter-link" type="button" onClick={() => { setSelectedStop(chapter.routeStopId); document.getElementById('route-planner')?.scrollIntoView({ behavior: 'smooth' }) }}>Edit location <span aria-hidden="true">↗</span></button></div>
-                </div>
-                <div className="story-stamp" aria-hidden="true">{chapter.number}<span>DAY<br />STOP</span></div>
-              </article>
-            ))}
-          </div>
         </section>
 
         <section className="closing-note">
@@ -412,6 +403,15 @@ function App() {
             <div className="route-overview-caption"><span>San Francisco map preview · route context</span><span>OpenStreetMap</span></div>
           </div>
           <span className="closing-caption">END OF PLANNING VIEW 001</span>
+        </section>
+
+        <section className="collab-panel" id="collaboration" aria-labelledby="collab-title">
+          <div className="collab-copy"><p className="eyebrow">SHARED TRIP + EVENT MODE</p><h2 id="collab-title">Plan together, on the same map.</h2></div>
+          <div className="role-control"><span className="summary-label">VIEW AS</span><div className="role-switch" role="group" aria-label="Choose collaboration role">{(['admin', 'collaborator', 'guest'] as TeamRole[]).map((role) => <button key={role} type="button" aria-pressed={teamRole === role} onClick={() => setTeamRole(role)}>{role}</button>)}</div><p className="role-note">{teamRole === 'admin' ? 'Full control · edit route and invite people' : teamRole === 'collaborator' ? 'Can suggest stops and add notes' : 'View-only access to route and timing'}</p><div className="role-actions"><button type="button" className={`role-toggle role-primary ${routeEditing ? 'is-on' : ''}`} aria-pressed={routeEditing} onClick={() => setRouteEditing((current) => !current)}><span className="toggle-track"><span /></span>{teamRole === 'admin' ? 'Edit route' : teamRole === 'collaborator' ? 'Suggest a stop' : 'Request access'}</button><button type="button" className={`role-toggle role-secondary ${invitePeople ? 'is-on' : ''}`} aria-pressed={invitePeople} onClick={() => setInvitePeople((current) => !current)}><span className="toggle-track"><span /></span>{teamRole === 'admin' ? 'Invite people' : teamRole === 'collaborator' ? 'Add a note' : 'Copy shared link'}</button></div></div>
+          <div className="avatar-stack" aria-hidden="true"><span>MC</span><span>JL</span><span>RP</span></div>
+          <div className="profile-list" aria-label="People sharing this trip plan">
+            {sharedPeople.map((person) => <div className="profile-row" key={person.name}><span className="profile-avatar" style={{ '--profile-color': person.color } as React.CSSProperties}>{person.initials}</span><span className="profile-info"><strong>{person.name}</strong><small>{person.role}</small></span><span className="profile-status"><i />{person.status}</span></div>)}
+          </div>
         </section>
       </main>
 
