@@ -185,7 +185,7 @@ function App() {
   function toggleMetric(metric: Metric) {
     setVisibleMetrics((current) =>
       current.includes(metric)
-        ? current.length === 1 ? current : current.filter((item) => item !== metric)
+        ? current.filter((item) => item !== metric)
         : [...current, metric],
     )
   }
