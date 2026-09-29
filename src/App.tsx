@@ -26,6 +26,7 @@ const chapters = [
     duration: '20 min to get ready',
     travel: '30 min to cafe',
     stop: 'HOME',
+    routeStopId: 'north-station',
   },
   {
     id: 'midday-pause',
@@ -36,6 +37,7 @@ const chapters = [
     duration: '45 min stop',
     travel: '30 min from home',
     stop: 'JUNIPER CAFE',
+    routeStopId: 'market',
   },
   {
     id: 'after-hours',
@@ -46,6 +48,7 @@ const chapters = [
     duration: '90 min stop',
     travel: '15 min from cafe',
     stop: 'ALDER PARK',
+    routeStopId: 'parkside',
   },
   {
     id: 'dinner-stop',
@@ -56,6 +59,7 @@ const chapters = [
     duration: '75 min stop',
     travel: '20 min from park',
     stop: 'CEDAR TABLE',
+    routeStopId: 'old-quay',
   },
   {
     id: 'hotel-stop',
@@ -66,6 +70,7 @@ const chapters = [
     duration: 'Overnight stay',
     travel: '15 min from dinner',
     stop: 'THE LANTERN HOTEL',
+    routeStopId: 'old-quay',
   },
 ]
 
@@ -383,9 +388,7 @@ function App() {
                     <span><b>DURATION</b>{chapter.duration}</span>
                     <span><b>TRAVEL</b>{chapter.travel}</span>
                   </div>
-                  <button className="text-link chapter-link" type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                    Use this time window <span aria-hidden="true">↑</span>
-                  </button>
+                  <div className="itinerary-actions"><button className="text-link chapter-link" type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Use this time window <span aria-hidden="true">↑</span></button><button className="text-link chapter-link" type="button" onClick={() => { setSelectedStop(chapter.routeStopId); document.getElementById('route-planner')?.scrollIntoView({ behavior: 'smooth' }) }}>Edit location <span aria-hidden="true">↗</span></button></div>
                 </div>
                 <div className="story-stamp" aria-hidden="true">{chapter.number}<span>DAY<br />STOP</span></div>
               </article>
