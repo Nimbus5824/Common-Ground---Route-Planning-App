@@ -388,7 +388,7 @@ function App() {
                     <span><b>DURATION</b>{chapter.duration}</span>
                     <span><b>TRAVEL</b>{chapter.travel}</span>
                   </div>
-                  <div className="itinerary-actions"><button className="text-link chapter-link" type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Use this time window <span aria-hidden="true">↑</span></button><button className="text-link chapter-link" type="button" onClick={() => { setSelectedStop(chapter.routeStopId); document.getElementById('route-planner')?.scrollIntoView({ behavior: 'smooth' }) }}>Edit location <span aria-hidden="true">↗</span></button></div>
+                  <div className="itinerary-actions"><button className="text-link chapter-link" type="button" onClick={() => { setSelectedStop(chapter.routeStopId); document.getElementById('route-planner')?.scrollIntoView({ behavior: 'smooth' }) }}>Edit location <span aria-hidden="true">↗</span></button></div>
                 </div>
                 <div className="story-stamp" aria-hidden="true">{chapter.number}<span>DAY<br />STOP</span></div>
               </article>
