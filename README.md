@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Data Storytelling App – Project Brief
 
 ## Project Name
@@ -189,4 +190,5 @@ Data Storytelling App is deployed as a static site on **Vercel**.
 /
 ├─ index.html
 ├─ styles.css
-└─ script.js
+├─ script.js
+```
