@@ -244,7 +244,7 @@ function App() {
                     key={metric}
                     onClick={() => toggleMetric(metric)}
                   >
-                    <span className="legend-dot" style={{ '--legend-color': colors[metric] } as React.CSSProperties} />
+                    <span className="metric-switch" style={{ '--metric-color': colors[metric] } as React.CSSProperties} aria-hidden="true"><span /></span>
                     {metric}
                   </button>
                 ))}
